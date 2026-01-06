@@ -145,3 +145,23 @@ img {
   background: var(--color-primary-soft);
   color: var(--color-text);
 }
+
+/* App Loading */
+.app-loading {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
+}
+
+.app-loading .loading-heart {
+  font-size: 3rem;
+  animation: heartBeat 1.5s ease-in-out infinite;
+}
+
+.app-loading p {
+  color: var(--color-text-muted);
+  margin: 0;
+}
