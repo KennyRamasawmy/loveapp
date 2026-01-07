@@ -14,6 +14,7 @@ const Navigation = () => {
     { path: '/quote', label: 'Quote', icon: '💌' },
     { path: '/calendar', label: 'Calendar', icon: '📅' },
     { path: '/timeline', label: 'Timeline', icon: '💫' },
+    { path: '/bucket-list', label: 'Bucket List', icon: '🎯' },
   ];
 
   if (isAdmin) {
