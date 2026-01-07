@@ -1,6 +1,8 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
-import { Layout, EasterEgg } from './components/UI';
+import { ThemeProvider } from './context/ThemeContext';
+import { useAppData } from './hooks/useAppData';
+import { Layout, EasterEgg, InstallPrompt } from './components/UI';
 import { Login } from './components/Auth';
 import { Home } from './components/Home';
 import { Gallery } from './components/Gallery';
@@ -8,6 +10,7 @@ import { Quote } from './components/Quote';
 import { Calendar } from './components/Calendar';
 import { Timeline } from './components/Timeline';
 import { Admin } from './components/Admin';
+
 
 import './styles/globals.css';
 import './styles/animations.css';
@@ -79,10 +82,12 @@ const PublicRoute = ({ children }) => {
 // App Content with Routes
 const AppContent = () => {
   const { user } = useAuth();
+  const { data } = useAppData();
 
   return (
-    <>
+    <ThemeProvider accentColor={data?.settings?.accentColor}>
       {user && <EasterEgg />}
+      <InstallPrompt />
       <Routes>
         <Route
           path="/login"
@@ -161,7 +166,7 @@ const AppContent = () => {
 
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
-    </>
+    </ThemeProvider>
   );
 };
 

@@ -5,3 +5,4 @@ export { default as Input } from './Input';
 export { default as Navigation } from './Navigation';
 export { default as Layout } from './Layout';
 export { default as EasterEgg } from './EasterEgg';
+export { default as InstallPrompt } from './InstallPrompt';
