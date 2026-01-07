@@ -155,3 +155,17 @@
     font-size: 3rem;
   }
 }
+
+/* Dark Mode */
+.dark-mode .login-container {
+  background: var(--color-bg);
+}
+
+.dark-mode .login-error {
+  background: rgba(220, 38, 38, 0.1);
+  border-color: rgba(220, 38, 38, 0.3);
+}
+
+.dark-mode .floating-heart {
+  opacity: 0.2;
+}

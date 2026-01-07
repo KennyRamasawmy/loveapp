@@ -11,6 +11,7 @@ import { Calendar } from './components/Calendar';
 import { Timeline } from './components/Timeline';
 import { Admin } from './components/Admin';
 import { BucketList } from './components/BucketList';
+import { Stats } from './components/Stats';
 
 import './styles/globals.css';
 import './styles/animations.css';
@@ -159,6 +160,17 @@ const AppContent = () => {
             <ProtectedRoute>
               <Layout>
                 <BucketList />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/stats"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <Stats />
               </Layout>
             </ProtectedRoute>
           }
