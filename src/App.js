@@ -10,7 +10,7 @@ import { Quote } from './components/Quote';
 import { Calendar } from './components/Calendar';
 import { Timeline } from './components/Timeline';
 import { Admin } from './components/Admin';
-
+import { BucketList } from './components/BucketList';
 
 import './styles/globals.css';
 import './styles/animations.css';
@@ -148,6 +148,17 @@ const AppContent = () => {
             <ProtectedRoute>
               <Layout>
                 <Timeline />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/bucket-list"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <BucketList />
               </Layout>
             </ProtectedRoute>
           }

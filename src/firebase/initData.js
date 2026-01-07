@@ -56,6 +56,28 @@ export const initialData = {
     }
   ],
   
+  bucketList: [
+    {
+      id: "1",
+      title: "Watch the sunset on a beach together",
+      description: "Find a beautiful beach and watch the sunset",
+      category: "travel",
+      completed: false,
+      createdBy: "him",
+      createdAt: "2025-01-01",
+      completedAt: null
+    }
+  ],
+  
+  bucketListCategories: [
+    { id: "travel", name: "Travel", emoji: "✈️" },
+    { id: "adventure", name: "Adventure", emoji: "🎯" },
+    { id: "food", name: "Food & Dining", emoji: "🍽️" },
+    { id: "experiences", name: "Experiences", emoji: "✨" },
+    { id: "goals", name: "Life Goals", emoji: "🏠" },
+    { id: "romance", name: "Romance", emoji: "💕" }
+  ],
+  
   settings: {
     easterEggTrigger: "iloveyou",
     accentColor: "#e8a4b8"
