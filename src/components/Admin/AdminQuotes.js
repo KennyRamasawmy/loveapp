@@ -1,4 +1,6 @@
-const AdminQuotes = ({ data, onChange }) => {
+const AdminQuotes = ({ data = [], onChange }) => {
+  const quotesData = Array.isArray(data) ? data : [];
+
   const addQuote = () => {
     const today = new Date().toISOString().split('T')[0];
     const newQuote = {
@@ -6,21 +8,21 @@ const AdminQuotes = ({ data, onChange }) => {
       date: today,
       quote: ''
     };
-    onChange([...data, newQuote]);
+    onChange([...quotesData, newQuote]);
   };
 
   const updateQuote = (index, field, value) => {
-    const updated = [...data];
+    const updated = [...quotesData];
     updated[index] = { ...updated[index], [field]: value };
     onChange(updated);
   };
 
   const deleteQuote = (index) => {
-    const updated = data.filter((_, i) => i !== index);
+    const updated = quotesData.filter((_, i) => i !== index);
     onChange(updated);
   };
 
-  const sortedData = [...(data || [])].sort(
+  const sortedData = [...quotesData].sort(
     (a, b) => new Date(b.date) - new Date(a.date)
   );
 
@@ -29,10 +31,10 @@ const AdminQuotes = ({ data, onChange }) => {
       <h3 className="admin-section-title">💌 Daily Quotes</h3>
 
       <div className="quotes-items">
-        {sortedData.map((item, index) => {
-          const originalIndex = data.findIndex(q => q.id === item.id);
+        {sortedData.map((item) => {
+          const originalIndex = quotesData.findIndex(q => q.id === item.id);
           return (
-            <div key={item.id || index} className="admin-item-card">
+            <div key={item.id} className="admin-item-card">
               <div className="admin-item-header">
                 <span className="admin-item-title">
                   {new Date(item.date).toLocaleDateString('en-US', {

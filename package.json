@@ -2,7 +2,7 @@
   "name": "loveapp",
   "version": "1.0.0",
   "private": true,
-  "homepage": "https://kennyramasawmy.github.io/love-app",
+  "homepage": "https://kennyramasawmy.github.io/loveapp",
   "dependencies": {
     "firebase": "^10.x.x",
     "react": "^18.x.x",

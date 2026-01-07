@@ -1,4 +1,6 @@
-const AdminCalendar = ({ data, onChange }) => {
+const AdminCalendar = ({ data = [], onChange }) => {
+  const calendarData = Array.isArray(data) ? data : [];
+
   const addNote = () => {
     const today = new Date().toISOString().split('T')[0];
     const newNote = {
@@ -8,21 +10,21 @@ const AdminCalendar = ({ data, onChange }) => {
       description: '',
       type: 'memory'
     };
-    onChange([...data, newNote]);
+    onChange([...calendarData, newNote]);
   };
 
   const updateNote = (index, field, value) => {
-    const updated = [...data];
+    const updated = [...calendarData];
     updated[index] = { ...updated[index], [field]: value };
     onChange(updated);
   };
 
   const deleteNote = (index) => {
-    const updated = data.filter((_, i) => i !== index);
+    const updated = calendarData.filter((_, i) => i !== index);
     onChange(updated);
   };
 
-  const sortedData = [...(data || [])].sort(
+  const sortedData = [...calendarData].sort(
     (a, b) => new Date(b.date) - new Date(a.date)
   );
 
@@ -37,10 +39,10 @@ const AdminCalendar = ({ data, onChange }) => {
       <h3 className="admin-section-title">📅 Calendar Notes</h3>
 
       <div className="calendar-items">
-        {sortedData.map((item, index) => {
-          const originalIndex = data.findIndex(n => n.id === item.id);
+        {sortedData.map((item) => {
+          const originalIndex = calendarData.findIndex(n => n.id === item.id);
           return (
-            <div key={item.id || index} className="admin-item-card">
+            <div key={item.id} className="admin-item-card">
               <div className="admin-item-header">
                 <span className="admin-item-title">
                   {item.title || 'Untitled Note'}

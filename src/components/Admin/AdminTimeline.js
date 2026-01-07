@@ -1,4 +1,6 @@
-const AdminTimeline = ({ data, onChange }) => {
+const AdminTimeline = ({ data = [], onChange }) => {
+  const timelineData = Array.isArray(data) ? data : [];
+
   const addMemory = () => {
     const today = new Date().toISOString().split('T')[0];
     const newMemory = {
@@ -7,21 +9,21 @@ const AdminTimeline = ({ data, onChange }) => {
       title: '',
       description: ''
     };
-    onChange([...data, newMemory]);
+    onChange([...timelineData, newMemory]);
   };
 
   const updateMemory = (index, field, value) => {
-    const updated = [...data];
+    const updated = [...timelineData];
     updated[index] = { ...updated[index], [field]: value };
     onChange(updated);
   };
 
   const deleteMemory = (index) => {
-    const updated = data.filter((_, i) => i !== index);
+    const updated = timelineData.filter((_, i) => i !== index);
     onChange(updated);
   };
 
-  const sortedData = [...(data || [])].sort(
+  const sortedData = [...timelineData].sort(
     (a, b) => new Date(b.date) - new Date(a.date)
   );
 
@@ -30,10 +32,10 @@ const AdminTimeline = ({ data, onChange }) => {
       <h3 className="admin-section-title">💫 Timeline Memories</h3>
 
       <div className="timeline-items">
-        {sortedData.map((item, index) => {
-          const originalIndex = data.findIndex(m => m.id === item.id);
+        {sortedData.map((item) => {
+          const originalIndex = timelineData.findIndex(m => m.id === item.id);
           return (
-            <div key={item.id || index} className="admin-item-card">
+            <div key={item.id} className="admin-item-card">
               <div className="admin-item-header">
                 <span className="admin-item-title">
                   {item.title || 'Untitled Memory'}

@@ -2,6 +2,8 @@
   padding: var(--space-lg);
   max-width: 900px;
   margin: 0 auto;
+  position: relative;
+  overflow: hidden;
 }
 
 .home-loading {
@@ -23,12 +25,177 @@
   margin: 0;
 }
 
-/* Hero Section */
+/* ==================== */
+/* CELEBRATION BACKGROUND */
+/* ==================== */
+
+.celebration-bg {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.floating-celebration {
+  position: absolute;
+  bottom: -50px;
+  animation: floatUpCelebration linear infinite;
+  opacity: 0.8;
+}
+
+.floating-celebration.anniversary {
+  animation-name: floatUpCelebrationSpin;
+}
+
+@keyframes floatUpCelebration {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(-100vh) rotate(20deg);
+    opacity: 0;
+  }
+}
+
+@keyframes floatUpCelebrationSpin {
+  0% {
+    transform: translateY(0) rotate(0deg) scale(1);
+    opacity: 0.9;
+  }
+  50% {
+    transform: translateY(-50vh) rotate(180deg) scale(1.2);
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateY(-100vh) rotate(360deg) scale(0.8);
+    opacity: 0;
+  }
+}
+
+/* ==================== */
+/* SPECIAL DAY BANNER   */
+/* ==================== */
+
+.special-day-banner {
+  text-align: center;
+  padding: var(--space-xl);
+  margin-bottom: var(--space-xl);
+  border-radius: var(--radius-lg);
+  position: relative;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(-20px) scale(0.95);
+  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 1;
+}
+
+.special-day-banner.visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.special-day-banner.anniversary {
+  background: linear-gradient(
+    135deg,
+    #ffd700 0%,
+    #ffb347 25%,
+    #ff6b9d 50%,
+    #c44569 75%,
+    #ffd700 100%
+  );
+  background-size: 300% 300%;
+  animation: gradientShift 5s ease infinite;
+  box-shadow: 
+    0 10px 40px rgba(255, 107, 157, 0.4),
+    0 0 60px rgba(255, 215, 0, 0.3);
+}
+
+.special-day-banner.monthly {
+  background: linear-gradient(
+    135deg,
+    var(--color-primary-soft) 0%,
+    var(--color-primary) 50%,
+    var(--color-primary-dark) 100%
+  );
+  box-shadow: 0 10px 40px var(--color-shadow);
+}
+
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.banner-emoji {
+  font-size: 4rem;
+  display: block;
+  margin-bottom: var(--space-md);
+  animation: bounce 1s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+
+.banner-title {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 600;
+  color: white;
+  margin: 0 0 var(--space-sm);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.banner-message {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.95);
+  margin: 0;
+  text-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
+}
+
+.banner-sparkles {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-md);
+  margin-top: var(--space-md);
+  font-size: 1.5rem;
+}
+
+.banner-sparkles span {
+  animation: sparkle 1.5s ease-in-out infinite;
+}
+
+.banner-sparkles span:nth-child(2) {
+  animation-delay: 0.3s;
+}
+
+.banner-sparkles span:nth-child(3) {
+  animation-delay: 0.6s;
+}
+
+@keyframes sparkle {
+  0%, 100% { 
+    transform: scale(1) rotate(0deg); 
+    opacity: 1;
+  }
+  50% { 
+    transform: scale(1.3) rotate(15deg); 
+    opacity: 0.7;
+  }
+}
+
+/* ==================== */
+/* HERO SECTION         */
+/* ==================== */
+
 .home-hero {
   text-align: center;
   padding: var(--space-2xl) var(--space-lg);
   margin-bottom: var(--space-xl);
   position: relative;
+  z-index: 1;
   opacity: 0;
   transform: translateY(20px);
   transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
@@ -122,12 +289,17 @@
   font-weight: 500;
 }
 
-/* Stats Section */
+/* ==================== */
+/* STATS SECTION        */
+/* ==================== */
+
 .home-stats {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: var(--space-md);
   margin-bottom: var(--space-xl);
+  position: relative;
+  z-index: 1;
   opacity: 0;
   transform: translateY(20px);
   transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
@@ -152,7 +324,7 @@
 
 .stat-value {
   font-family: var(--font-display);
-  font-size: 2.5rem;
+  font-size: 2rem;
   font-weight: 600;
   color: var(--color-text);
   display: block;
@@ -160,22 +332,42 @@
 }
 
 .stat-label {
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   color: var(--color-text-muted);
   display: block;
   margin-top: var(--space-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
-.stat-card.anniversary {
+/* Time Together Card - Special Styling */
+.stat-card.time-together-card {
   background: linear-gradient(135deg, var(--color-primary-soft), var(--color-bg-card));
+  border: 2px solid var(--color-primary-soft);
 }
 
-.stat-card.anniversary .stat-value {
+.stat-card.time-together-card .stat-value {
   color: var(--color-primary-dark);
+  font-size: 1.8rem;
 }
 
-/* Message Section */
+/* Anniversary Card */
+.stat-card.anniversary-card {
+  background: linear-gradient(135deg, #fff9e6, var(--color-bg-card));
+  border: 2px solid #ffd700;
+}
+
+.stat-card.anniversary-card .stat-value {
+  color: #d4a000;
+}
+
+/* ==================== */
+/* MESSAGE SECTION      */
+/* ==================== */
+
 .home-message {
+  position: relative;
+  z-index: 1;
   opacity: 0;
   transform: translateY(20px);
   transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
@@ -218,7 +410,35 @@
   color: var(--color-primary-dark);
 }
 
-/* Mobile Adjustments */
+/* ==================== */
+/* SPECIAL MODE STYLES  */
+/* ==================== */
+
+.home.anniversary-mode .hero-icon {
+  animation: heartBeat 0.8s ease-in-out infinite;
+}
+
+.home.anniversary-mode .hero-title {
+  background: linear-gradient(135deg, #ffd700, #ff6b9d, #ffd700);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmerText 3s linear infinite;
+}
+
+@keyframes shimmerText {
+  to { background-position: 200% center; }
+}
+
+.home.monthly-mode .hero-icon {
+  animation: heartBeat 1s ease-in-out infinite;
+}
+
+/* ==================== */
+/* MOBILE ADJUSTMENTS   */
+/* ==================== */
+
 @media (max-width: 480px) {
   .hero-title {
     font-size: 2rem;
@@ -229,7 +449,11 @@
   }
 
   .stat-value {
-    font-size: 2rem;
+    font-size: 1.6rem;
+  }
+
+  .stat-card.time-together-card .stat-value {
+    font-size: 1.4rem;
   }
 
   .home-stats {
@@ -239,6 +463,30 @@
 
   .stat-card {
     padding: var(--space-md);
+  }
+
+  .stat-icon {
+    font-size: 1.5rem;
+  }
+
+  .stat-label {
+    font-size: 0.7rem;
+  }
+
+  .special-day-banner {
+    padding: var(--space-lg);
+  }
+
+  .banner-emoji {
+    font-size: 3rem;
+  }
+
+  .banner-title {
+    font-size: 1.5rem;
+  }
+
+  .banner-message {
+    font-size: 1rem;
   }
 }
 
