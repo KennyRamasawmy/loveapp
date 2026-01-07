@@ -1,14 +1,25 @@
-const AdminCalendar = ({ data = [], onChange }) => {
+const AdminCalendar = ({ data = [], categories = [], onChange }) => {
   const calendarData = Array.isArray(data) ? data : [];
+  const categoriesData = Array.isArray(categories) ? categories : [];
+
+  // Default categories if none exist
+  const defaultCategories = [
+    { id: "anniversary", name: "Anniversary", emoji: "🎉" },
+    { id: "memory", name: "Memory", emoji: "💭" },
+    { id: "surprise", name: "Surprise", emoji: "🎁" }
+  ];
+
+  const availableCategories = categoriesData.length > 0 ? categoriesData : defaultCategories;
 
   const addNote = () => {
     const today = new Date().toISOString().split('T')[0];
+    const defaultType = availableCategories[0]?.id || 'memory';
     const newNote = {
       id: Date.now().toString(),
       date: today,
       title: '',
       description: '',
-      type: 'memory'
+      type: defaultType
     };
     onChange([...calendarData, newNote]);
   };
@@ -28,11 +39,10 @@ const AdminCalendar = ({ data = [], onChange }) => {
     (a, b) => new Date(b.date) - new Date(a.date)
   );
 
-  const typeOptions = [
-    { value: 'anniversary', label: '💍 Anniversary' },
-    { value: 'memory', label: '💭 Memory' },
-    { value: 'surprise', label: '🎁 Surprise' }
-  ];
+  const getCategoryEmoji = (typeId) => {
+    const cat = availableCategories.find(c => c.id === typeId);
+    return cat?.emoji || '💗';
+  };
 
   return (
     <div className="admin-calendar">
@@ -45,7 +55,7 @@ const AdminCalendar = ({ data = [], onChange }) => {
             <div key={item.id} className="admin-item-card">
               <div className="admin-item-header">
                 <span className="admin-item-title">
-                  {item.title || 'Untitled Note'}
+                  {getCategoryEmoji(item.type)} {item.title || 'Untitled Note'}
                 </span>
                 <button
                   className="admin-delete-btn"
@@ -67,15 +77,15 @@ const AdminCalendar = ({ data = [], onChange }) => {
                 </div>
 
                 <div className="admin-form-group">
-                  <label className="admin-form-label">Type</label>
+                  <label className="admin-form-label">Category</label>
                   <select
                     className="admin-form-input"
-                    value={item.type || 'memory'}
+                    value={item.type || ''}
                     onChange={(e) => updateNote(originalIndex, 'type', e.target.value)}
                   >
-                    {typeOptions.map(opt => (
-                      <option key={opt.value} value={opt.value}>
-                        {opt.label}
+                    {availableCategories.map(cat => (
+                      <option key={cat.id} value={cat.id}>
+                        {cat.emoji} {cat.name}
                       </option>
                     ))}
                   </select>
@@ -111,6 +121,10 @@ const AdminCalendar = ({ data = [], onChange }) => {
       <button className="admin-add-btn" onClick={addNote}>
         <span>+</span> Add Calendar Note
       </button>
+
+      <p className="admin-hint">
+        💡 Manage categories in the "Categories" tab. Your custom categories will appear here.
+      </p>
     </div>
   );
 };
