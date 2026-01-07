@@ -140,7 +140,7 @@
 .admin-content-card {
   padding: var(--space-xl);
   padding-bottom: var(--space-3xl);
-  margin-bottom: 100px;
+  margin-bottom: 120px;
   min-height: auto;
 }
 
@@ -394,7 +394,7 @@
   .admin-content-card {
     padding: var(--space-md);
     padding-bottom: var(--space-2xl);
-    margin-bottom: 100px;
+    margin-bottom: 120px;
     min-height: auto;
   }
 

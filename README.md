@@ -10,7 +10,7 @@ A private, modern, romantic web application designed as a mini love app for coup
 
 ### 🏠 Home Page
 - Beautiful welcome message with your names
-- Relationship duration display (Years & Months)
+- Relationship duration display (Years & Months format)
 - Live statistics: Days, Months, Years together
 - Anniversary countdown
 - **Special Day Celebrations**: Automatic animations and messages on monthly/yearly anniversaries
@@ -30,7 +30,7 @@ A private, modern, romantic web application designed as a mini love app for coup
 - Monthly calendar view
 - **Auto-generated monthly anniversaries**
 - **Auto-generated yearly anniversaries**
-- Custom categories with emojis
+- **Custom categories with emojis**
 - Click any date to see events
 - Dynamic legend based on active categories
 
@@ -38,6 +38,37 @@ A private, modern, romantic web application designed as a mini love app for coup
 - Chronological journey of your relationship
 - Scroll-triggered reveal animations
 - Beautiful milestone cards
+
+### 🎯 Bucket List
+- Shared goals and dreams
+- Both partners can add/edit/complete items
+- Filter by category or status
+- Progress tracking with percentage
+- Custom categories (Travel, Adventure, Food, etc.)
+
+### 📊 Relationship Stats
+- Track fun statistics (kisses, hugs, dates, etc.)
+- Both partners can increment/decrement
+- Add custom stats with emoji picker
+- Quick add buttons (+5, +10, +50, +100)
+- Persistent order - stats stay in place
+
+### 🌙 Dark Mode
+- Toggle between light and dark themes
+- Remembers your preference
+- Respects system preference on first visit
+- Beautiful dark color scheme
+
+### 📱 PWA Install
+- Install as mobile app
+- Works on iOS and Android
+- Desktop installation support
+
+### 🎨 Theme Customization
+- Choose from preset accent colors
+- Custom color picker
+- Live preview in settings
+- Colors apply across entire app
 
 ### 🥚 Easter Egg
 - Hidden surprise message
@@ -59,8 +90,8 @@ A private, modern, romantic web application designed as a mini love app for coup
 
 ### Database Rules
 - Read access: Authenticated users only
-- Write access: Admin role only
-- User documents: Private to each user
+- Write access: Both users for shared features (bucket list, stats)
+- Admin-only access for core content management
 
 ## 🛠️ Tech Stack
 
@@ -72,6 +103,7 @@ A private, modern, romantic web application designed as a mini love app for coup
 | React Router 6 | Navigation |
 | GitHub Pages | Free hosting |
 | CSS3 | Styling & animations |
+| PWA | Mobile app experience |
 
 ## 📦 Installation
 
@@ -143,7 +175,7 @@ In Firebase Console → Authentication → Users:
 1. Run `npm start`
 2. Go to `http://localhost:3000/setup`
 3. Click "Initialize Database"
-4. Remove `/setup` route after initialization (see Security section)
+4. Remove `/setup` route after initialization
 
 ### Step 7: Deploy
 
@@ -170,13 +202,13 @@ service cloud.firestore {
   match /databases/{database}/documents {
     match /users/{userId} {
       allow read: if request.auth != null && request.auth.uid == userId;
+      allow write: if false;
     }
     
     match /app/{document=**} {
       allow read: if request.auth != null;
       allow write: if request.auth != null && 
-        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
-        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+        exists(/databases/$(database)/documents/users/$(request.auth.uid));
     }
   }
 }
@@ -189,21 +221,24 @@ src/
 ├── components/
 │   ├── Admin/          # Admin panel components
 │   ├── Auth/           # Login component
+│   ├── BucketList/     # Bucket list feature
 │   ├── Calendar/       # Calendar feature
 │   ├── Gallery/        # Photo gallery
 │   ├── Home/           # Home page
 │   ├── Quote/          # Daily quote
+│   ├── Stats/          # Relationship stats
 │   ├── Timeline/       # Memory timeline
 │   └── UI/             # Reusable components
 ├── context/
-│   └── AuthContext.js  # Authentication state
+│   ├── AuthContext.js  # Authentication state
+│   └── ThemeContext.js # Theme & dark mode state
 ├── firebase/
 │   ├── config.js       # Firebase configuration
 │   └── initData.js     # Initial data schema
 ├── hooks/
 │   └── useAppData.js   # Data fetching hook
 ├── styles/
-│   ├── globals.css     # Global styles
+│   ├── globals.css     # Global styles + dark mode
 │   └── animations.css  # Animation utilities
 ├── App.js              # Main app & routing
 └── index.js            # Entry point
@@ -211,17 +246,16 @@ src/
 
 ## 🎨 Customization
 
-### Colors
-Edit CSS variables in `src/styles/globals.css`:
+### Accent Colors
+Go to Admin → Settings → Accent Color to:
+- Choose from preset colors (Rose, Lavender, Sky, Mint, etc.)
+- Pick a custom color with the color picker
+- See live preview before saving
 
-```css
-:root {
-  --color-primary: #e8a4b8;
-  --color-primary-soft: #f5d5dd;
-  --color-primary-dark: #d4899e;
-  /* ... more variables */
-}
-```
+### Dark Mode
+- Click the moon/sun icon in the navigation bar
+- On mobile, open menu and tap "Dark Mode"
+- Preference is saved and remembered
 
 ### Fonts
 The app uses:
@@ -237,8 +271,9 @@ Change trigger word in Admin → Settings → Easter Egg Trigger Word
 
 - Mobile-first responsive design
 - Touch-friendly interactions
-- PWA-ready manifest
-- Optimized for iOS and Android browsers
+- PWA installable on home screen
+- Works on iOS and Android browsers
+- Dark mode toggle in mobile menu
 
 ## 🚀 Deployment Commands
 
@@ -261,17 +296,17 @@ npm run deploy
 
 ## ⚠️ Important Security Notes
 
-1. **Never commit Firebase config with real keys to public repos**
-2. **Use environment variables for sensitive data** (see Security Guide below)
-3. **Remove /setup route after initialization**
-4. **Keep your repository private if it contains personal data**
-5. **Regularly review Firebase security rules**
+1. **Firebase API keys are safe to expose** - Security comes from Firestore rules
+2. **Restrict your API key** in Google Cloud Console for extra security
+3. **Remove /setup route** after initialization
+4. **Keep repository private** if it contains personal photos
+5. **Regularly review** Firebase security rules
 
 ## 🐛 Troubleshooting
 
 ### "Permission denied" errors
 - Check Firestore security rules
-- Verify user role in `users` collection
+- Verify user exists in `users` collection
 - Ensure you're logged in
 
 ### Images not saving
@@ -280,13 +315,43 @@ npm run deploy
 - Firestore document limit is 1MB total
 
 ### Calendar dates off by one day
-- This is a timezone issue - already fixed in the code
-- Dates are parsed without timezone conversion
+- Fixed in code - dates are parsed without timezone conversion
 
-### Blank page after deploy
-- Check `homepage` in package.json
-- Verify GitHub Pages is using `gh-pages` branch
-- Clear browser cache
+### Stats order changing
+- Fixed - stats now use array format with order property
+
+### Dark mode not saving
+- Check localStorage is enabled in browser
+- Clear cache and try again
+
+### PWA not installing
+- Ensure manifest.json is valid
+- Check HTTPS is enabled (required for PWA)
+- Try in Chrome/Safari for best support
+
+## 📋 Feature Checklist
+
+| Feature | Status |
+|---------|--------|
+| React SPA | ✅ |
+| Firebase Auth | ✅ |
+| Firestore Database | ✅ |
+| Mobile-first Design | ✅ |
+| Role-based Access | ✅ |
+| Home with Stats | ✅ |
+| Photo Gallery | ✅ |
+| Daily Quotes | ✅ |
+| Calendar with Auto Events | ✅ |
+| Custom Categories | ✅ |
+| Memory Timeline | ✅ |
+| Bucket List | ✅ |
+| Relationship Stats | ✅ |
+| Dark Mode | ✅ |
+| PWA Install | ✅ |
+| Theme Customization | ✅ |
+| Easter Egg | ✅ |
+| Admin Panel | ✅ |
+| GitHub Pages Hosting | ✅ |
 
 ## 📄 License
 

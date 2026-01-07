@@ -4,8 +4,14 @@ const ThemeContext = createContext();
 
 export const useTheme = () => useContext(ThemeContext);
 
-export const ThemeProvider = ({ children, accentColor }) => {
+export const ThemeProvider = ({ children, accentColor, savedDarkMode }) => {
   const [color, setColor] = useState(accentColor || '#e8a4b8');
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    // Check localStorage first, then system preference
+    const saved = localStorage.getItem('darkMode');
+    if (saved !== null) return saved === 'true';
+    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+  });
 
   useEffect(() => {
     if (accentColor) {
@@ -14,10 +20,9 @@ export const ThemeProvider = ({ children, accentColor }) => {
   }, [accentColor]);
 
   useEffect(() => {
-    // Generate color variations
+    // Apply accent color
     const root = document.documentElement;
     
-    // Convert hex to HSL for easier manipulation
     const hexToHSL = (hex) => {
       let r = parseInt(hex.slice(1, 3), 16) / 255;
       let g = parseInt(hex.slice(3, 5), 16) / 255;
@@ -45,7 +50,6 @@ export const ThemeProvider = ({ children, accentColor }) => {
 
     const hsl = hexToHSL(color);
     
-    // Set CSS variables
     root.style.setProperty('--color-primary', color);
     root.style.setProperty('--color-primary-soft', `hsl(${hsl.h}, ${hsl.s}%, ${Math.min(hsl.l + 20, 95)}%)`);
     root.style.setProperty('--color-primary-dark', `hsl(${hsl.h}, ${hsl.s}%, ${Math.max(hsl.l - 15, 20)}%)`);
@@ -53,9 +57,35 @@ export const ThemeProvider = ({ children, accentColor }) => {
     
   }, [color]);
 
+  useEffect(() => {
+    // Apply dark mode
+    const root = document.documentElement;
+    
+    if (isDarkMode) {
+      root.classList.add('dark-mode');
+    } else {
+      root.classList.remove('dark-mode');
+    }
+    
+    // Save preference
+    localStorage.setItem('darkMode', isDarkMode.toString());
+    
+    // Update meta theme color
+    const metaTheme = document.querySelector('meta[name="theme-color"]');
+    if (metaTheme) {
+      metaTheme.setAttribute('content', isDarkMode ? '#1a1a2e' : '#e8a4b8');
+    }
+  }, [isDarkMode]);
+
+  const toggleDarkMode = () => {
+    setIsDarkMode(prev => !prev);
+  };
+
   const value = {
     accentColor: color,
-    setAccentColor: setColor
+    setAccentColor: setColor,
+    isDarkMode,
+    toggleDarkMode
   };
 
   return (

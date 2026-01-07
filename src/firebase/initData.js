@@ -78,6 +78,21 @@ export const initialData = {
     { id: "romance", name: "Romance", emoji: "💕" }
   ],
   
+  relationshipStats: {
+    dates: { value: 0, icon: "🍽️", label: "Dates" },
+    kisses: { value: 0, icon: "💋", label: "Kisses" },
+    hugs: { value: 0, icon: "🤗", label: "Hugs" },
+    movies: { value: 0, icon: "🎬", label: "Movies Watched" },
+    trips: { value: 0, icon: "✈️", label: "Trips Together" },
+    photos: { value: 0, icon: "📸", label: "Photos Taken" },
+    gifts: { value: 0, icon: "🎁", label: "Gifts Given" },
+    songs: { value: 0, icon: "🎵", label: "Songs Shared" },
+    fights: { value: 0, icon: "😤", label: "Fights (Resolved!)" },
+    makeups: { value: 0, icon: "🥰", label: "Make Ups" },
+    iloveyous: { value: 0, icon: "❤️", label: "I Love You's" },
+    laughs: { value: 0, icon: "😂", label: "Laughs Together" }
+  },
+  
   settings: {
     easterEggTrigger: "iloveyou",
     accentColor: "#e8a4b8"

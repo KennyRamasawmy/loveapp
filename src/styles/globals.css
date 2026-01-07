@@ -165,3 +165,325 @@ img {
   color: var(--color-text-muted);
   margin: 0;
 }
+
+/* ==================== */
+/* DARK MODE STYLES     */
+/* ==================== */
+
+.dark-mode {
+  --color-bg: #1a1a2e;
+  --color-bg-soft: #16213e;
+  --color-bg-card: #1f2544;
+  --color-text: #eaeaea;
+  --color-text-soft: #b8b8b8;
+  --color-text-muted: #888888;
+  --color-border: #2d3561;
+  --color-shadow: rgba(0, 0, 0, 0.3);
+}
+
+.dark-mode body::before {
+  background: 
+    radial-gradient(ellipse at 20% 20%, rgba(232, 164, 184, 0.1) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 80%, rgba(184, 212, 232, 0.1) 0%, transparent 40%),
+    radial-gradient(ellipse at 50% 50%, rgba(240, 197, 168, 0.05) 0%, transparent 60%);
+}
+
+/* Dark mode specific overrides */
+.dark-mode .navigation {
+  background: rgba(26, 26, 46, 0.9);
+  border-bottom-color: var(--color-border);
+}
+
+.dark-mode .nav-menu {
+  background: var(--color-bg-card);
+}
+
+.dark-mode .nav-toggle span {
+  background: var(--color-text);
+}
+
+.dark-mode .login-card {
+  background: var(--color-bg-card);
+  border-color: var(--color-border);
+}
+
+.dark-mode .card {
+  background: var(--color-bg-card);
+  border-color: var(--color-border);
+}
+
+.dark-mode .btn-primary {
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.dark-mode .btn-secondary {
+  background: var(--color-bg-soft);
+  border-color: var(--color-border);
+  color: var(--color-text);
+}
+
+.dark-mode .input,
+.dark-mode .admin-form-input,
+.dark-mode .admin-form-textarea,
+.dark-mode .form-input,
+.dark-mode .form-textarea {
+  background: var(--color-bg-soft);
+  border-color: var(--color-border);
+  color: var(--color-text);
+}
+
+.dark-mode .input:focus,
+.dark-mode .admin-form-input:focus,
+.dark-mode .admin-form-textarea:focus,
+.dark-mode .form-input:focus,
+.dark-mode .form-textarea:focus {
+  background: var(--color-bg-card);
+}
+
+.dark-mode .modal-overlay {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.dark-mode .modal-content {
+  background: var(--color-bg-card);
+}
+
+.dark-mode .admin-tabs-card {
+  background: var(--color-bg-card);
+}
+
+.dark-mode .admin-item-card {
+  background: var(--color-bg-soft);
+  border-color: var(--color-border);
+}
+
+.dark-mode .admin-add-btn {
+  background: var(--color-bg-soft);
+  border-color: var(--color-border);
+}
+
+.dark-mode .admin-add-btn:hover {
+  background: var(--color-primary-soft);
+}
+
+.dark-mode .calendar-day:not(.empty):hover {
+  background: var(--color-bg-soft);
+}
+
+.dark-mode .filter-btn {
+  background: var(--color-bg-card);
+  border-color: var(--color-border);
+}
+
+.dark-mode .filter-btn:hover {
+  border-color: var(--color-primary);
+}
+
+.dark-mode .bucket-item,
+.dark-mode .stat-card {
+  background: var(--color-bg-card);
+}
+
+.dark-mode .checkbox {
+  border-color: var(--color-border);
+}
+
+.dark-mode .progress-bar {
+  background: var(--color-bg-soft);
+}
+
+.dark-mode .control-btn.minus {
+  background: var(--color-bg-soft);
+}
+
+.dark-mode .add-stat-card {
+  border-color: var(--color-border);
+}
+
+.dark-mode .add-stat-card:hover {
+  background: rgba(232, 164, 184, 0.1);
+}
+
+.dark-mode .edit-input {
+  background: var(--color-bg-soft);
+  border-color: var(--color-border);
+  color: var(--color-text);
+}
+
+.dark-mode .quick-add-buttons button {
+  background: var(--color-bg-soft);
+}
+
+.dark-mode .emoji-btn {
+  background: var(--color-bg-soft);
+}
+
+.dark-mode .category-option {
+  background: var(--color-bg-soft);
+  border-color: var(--color-border);
+}
+
+.dark-mode .install-prompt {
+  background: var(--color-bg-card);
+}
+
+.dark-mode .install-ios-instructions {
+  background: var(--color-bg-soft);
+}
+
+.dark-mode .color-preview-card {
+  background: var(--color-bg-soft);
+}
+
+.dark-mode .preview-card {
+  background: var(--color-bg-card);
+}
+
+.dark-mode .gallery-image-wrapper {
+  background: var(--color-bg-soft);
+}
+
+.dark-mode .quote-card {
+  background: linear-gradient(
+    145deg,
+    var(--color-bg-card) 0%,
+    rgba(232, 164, 184, 0.1) 100%
+  );
+}
+
+.dark-mode .message-card {
+  background: linear-gradient(
+    135deg,
+    var(--color-bg-card) 0%,
+    rgba(232, 164, 184, 0.1) 100%
+  );
+}
+
+.dark-mode .time-together {
+  background: linear-gradient(
+    135deg,
+    var(--color-bg-card) 0%,
+    rgba(232, 164, 184, 0.15) 100%
+  );
+}
+
+.dark-mode .hero-date {
+  background: var(--color-bg-card);
+}
+
+.dark-mode .special-day-banner.monthly {
+  background: linear-gradient(
+    135deg,
+    rgba(232, 164, 184, 0.3) 0%,
+    var(--color-primary) 50%,
+    var(--color-primary-dark) 100%
+  );
+}
+
+.dark-mode .stat-card.time-together-card {
+  background: linear-gradient(135deg, rgba(232, 164, 184, 0.2), var(--color-bg-card));
+}
+
+.dark-mode .stat-card.anniversary-card {
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), var(--color-bg-card));
+}
+
+.dark-mode .progress-card {
+  background: linear-gradient(135deg, rgba(232, 164, 184, 0.15), var(--color-bg-card));
+}
+
+.dark-mode .total-card {
+  background: linear-gradient(135deg, rgba(232, 164, 184, 0.15), var(--color-bg-card));
+}
+
+.dark-mode .timeline-card {
+  background: var(--color-bg-card);
+}
+
+.dark-mode .admin-actions {
+  background: var(--color-bg-card);
+  border-top-color: var(--color-border);
+}
+
+.dark-mode .nav-overlay {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.dark-mode ::-webkit-scrollbar-track {
+  background: var(--color-bg-soft);
+}
+
+.dark-mode ::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+}
+
+.dark-mode ::selection {
+  background: rgba(232, 164, 184, 0.3);
+}
+
+/* Calendar Dark Mode Fixes */
+.dark-mode .calendar-day {
+  color: var(--color-text);
+}
+
+.dark-mode .calendar-day.has-note {
+  background: rgba(232, 164, 184, 0.2);
+  color: var(--color-text);
+}
+
+.dark-mode .calendar-day.has-note:hover {
+  background: var(--color-primary);
+  color: white;
+}
+
+.dark-mode .calendar-day.monthly {
+  background: rgba(232, 164, 184, 0.25);
+  color: var(--color-text);
+}
+
+.dark-mode .calendar-day.monthly:hover {
+  background: var(--color-primary);
+  color: white;
+}
+
+.dark-mode .calendar-day.anniversary {
+  background: rgba(255, 215, 0, 0.25);
+  color: var(--color-text);
+}
+
+.dark-mode .calendar-day.anniversary:hover {
+  background: #ffd700;
+  color: #1a1a2e;
+}
+
+.dark-mode .calendar-day.today {
+  background: var(--color-primary);
+  color: white;
+}
+
+.dark-mode .calendar-weekday {
+  color: var(--color-text-muted);
+}
+
+.dark-mode .calendar-nav .nav-btn {
+  background: var(--color-bg-soft);
+  color: var(--color-text);
+}
+
+.dark-mode .calendar-nav .nav-btn:hover {
+  background: var(--color-primary-soft);
+}
+
+.dark-mode .today-btn {
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+}
+
+.dark-mode .today-btn:hover {
+  background: var(--color-primary);
+  color: white;
+}
+
+.dark-mode .legend-item {
+  color: var(--color-text-soft);
+}

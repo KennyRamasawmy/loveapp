@@ -25,18 +25,5 @@
   "display": "standalone",
   "orientation": "portrait",
   "theme_color": "#e8a4b8",
-  "background_color": "#fdf8f7",
-  "categories": ["lifestyle", "personalization"],
-  "shortcuts": [
-    {
-      "name": "Gallery",
-      "url": "./gallery",
-      "icons": [{ "src": "logo192.png", "sizes": "192x192" }]
-    },
-    {
-      "name": "Calendar",
-      "url": "./calendar",
-      "icons": [{ "src": "logo192.png", "sizes": "192x192" }]
-    }
-  ]
+  "background_color": "#fdf8f7"
 }

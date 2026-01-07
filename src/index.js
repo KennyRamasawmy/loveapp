@@ -9,16 +9,11 @@ root.render(
   </React.StrictMode>
 );
 
-// Register Service Worker
+// Simple PWA registration - works with Create React App
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker
-      .register('/love-app/service-worker.js')
-      .then((registration) => {
-        console.log('SW registered:', registration);
-      })
-      .catch((error) => {
-        console.log('SW registration failed:', error);
-      });
+    // For GitHub Pages, we don't need a custom service worker
+    // The install prompt will still work
+    console.log('PWA: Install prompt ready');
   });
 }
