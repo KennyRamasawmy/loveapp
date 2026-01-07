@@ -8,6 +8,7 @@ import AdminQuotes from './AdminQuotes';
 import AdminCalendar from './AdminCalendar';
 import AdminTimeline from './AdminTimeline';
 import AdminSettings from './AdminSettings';
+import AdminCategories from './AdminCategories';
 import './Admin.css';
 
 const Admin = () => {
@@ -21,7 +22,17 @@ const Admin = () => {
 
   useEffect(() => {
     if (data) {
-      setLocalData(JSON.parse(JSON.stringify(data)));
+      // Ensure calendarCategories exists
+      const dataWithCategories = {
+        ...data,
+        calendarCategories: data.calendarCategories || [
+          { id: "anniversary", name: "Anniversary", emoji: "🎉" },
+          { id: "memory", name: "Memory", emoji: "💭" },
+          { id: "surprise", name: "Surprise", emoji: "🎁" },
+          { id: "date", name: "Date Night", emoji: "🌹" }
+        ]
+      };
+      setLocalData(JSON.parse(JSON.stringify(dataWithCategories)));
     }
     setTimeout(() => setVisible(true), 100);
   }, [data]);
@@ -73,6 +84,7 @@ const Admin = () => {
     { id: 'meta', label: 'Info', icon: '💕' },
     { id: 'gallery', label: 'Gallery', icon: '📷' },
     { id: 'quotes', label: 'Quotes', icon: '💌' },
+    { id: 'categories', label: 'Categories', icon: '🏷️' },
     { id: 'calendar', label: 'Calendar', icon: '📅' },
     { id: 'timeline', label: 'Timeline', icon: '💫' },
     { id: 'settings', label: 'Settings', icon: '⚙️' },
@@ -86,8 +98,16 @@ const Admin = () => {
         return <AdminGallery data={localData.gallery} onChange={(v) => updateLocalData('gallery', v)} />;
       case 'quotes':
         return <AdminQuotes data={localData.dailyQuotes} onChange={(v) => updateLocalData('dailyQuotes', v)} />;
+      case 'categories':
+        return <AdminCategories data={localData.calendarCategories} onChange={(v) => updateLocalData('calendarCategories', v)} />;
       case 'calendar':
-        return <AdminCalendar data={localData.calendarNotes} onChange={(v) => updateLocalData('calendarNotes', v)} />;
+        return (
+          <AdminCalendar 
+            data={localData.calendarNotes} 
+            categories={localData.calendarCategories}
+            onChange={(v) => updateLocalData('calendarNotes', v)} 
+          />
+        );
       case 'timeline':
         return <AdminTimeline data={localData.timeline} onChange={(v) => updateLocalData('timeline', v)} />;
       case 'settings':

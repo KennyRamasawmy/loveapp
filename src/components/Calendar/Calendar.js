@@ -14,7 +14,27 @@ const Calendar = () => {
   }, []);
 
   const calendarNotes = data?.calendarNotes || [];
+  const calendarCategories = data?.calendarCategories || [];
   const startDate = data?.meta?.startDate;
+
+  // Default categories (fallback)
+  const defaultCategories = [
+    { id: "anniversary", name: "Anniversary", emoji: "🎉" },
+    { id: "monthly", name: "Monthly", emoji: "💕" },
+    { id: "memory", name: "Memory", emoji: "💭" },
+    { id: "surprise", name: "Surprise", emoji: "🎁" }
+  ];
+
+  // Merge custom categories with system categories (monthly, anniversary for auto-generated)
+  const systemCategories = [
+    { id: "anniversary", name: "Anniversary", emoji: "🎉", isSystem: true },
+    { id: "monthly", name: "Monthly", emoji: "💕", isSystem: true }
+  ];
+
+  const allCategories = [
+    ...systemCategories,
+    ...calendarCategories.filter(c => c.id !== 'anniversary' && c.id !== 'monthly')
+  ];
 
   // Parse date string without timezone issues
   const parseDate = (dateStr) => {
@@ -39,7 +59,6 @@ const Calendar = () => {
     const now = new Date();
     const autoEvents = [];
 
-    // Generate events from start date to 1 year in the future
     const endDate = new Date(now.getFullYear() + 1, now.getMonth(), now.getDate());
 
     let monthCounter = 1;
@@ -47,13 +66,11 @@ const Calendar = () => {
     let currentMonth = startMonth + 1;
 
     while (true) {
-      // Handle month overflow
       if (currentMonth > 11) {
         currentMonth = 0;
         currentYear++;
       }
 
-      // Check if we've passed the end date
       const checkDate = new Date(currentYear, currentMonth, startDay);
       if (checkDate > endDate) break;
 
@@ -62,20 +79,17 @@ const Calendar = () => {
 
       let title, description, type;
 
-      // Handle months with fewer days
       const lastDayOfMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
       const actualDay = Math.min(startDay, lastDayOfMonth);
 
       if (months === 0 && years > 0) {
-        // Yearly anniversary
         title = `🎉 ${years} Year${years > 1 ? 's' : ''} Anniversary!`;
         description = `Celebrating ${years} amazing year${years > 1 ? 's' : ''} together!`;
         type = 'anniversary';
       } else {
-        // Monthly anniversary
         if (years > 0) {
           title = `💕 ${years}y ${months}m Together`;
-          description = `${monthCounter} months of love and happiness!`;
+          description = `${years} year${years > 1 ? 's' : ''} and ${months} month${months > 1 ? 's' : ''} of love!`;
         } else {
           title = `💕 ${months} Month${months > 1 ? 's' : ''} Together`;
           description = `Celebrating ${months} month${months > 1 ? 's' : ''} of love!`;
@@ -140,29 +154,33 @@ const Calendar = () => {
   };
 
   const { daysInMonth, startingDay } = getDaysInMonth(currentDate);
-
   const monthName = currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-
   const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
+  // Get emoji for a category type
   const getTypeEmoji = (type) => {
-    switch (type) {
-      case 'anniversary': return '🎉';
-      case 'monthly': return '💕';
-      case 'memory': return '💭';
-      case 'surprise': return '🎁';
-      default: return '💗';
-    }
+    const category = allCategories.find(c => c.id === type);
+    if (category) return category.emoji;
+    
+    // Fallback for unknown types
+    const defaults = { anniversary: '🎉', monthly: '💕', memory: '💭', surprise: '🎁' };
+    return defaults[type] || '💗';
   };
 
+  // Get label for a category type
   const getTypeLabel = (type) => {
-    switch (type) {
-      case 'anniversary': return 'Anniversary';
-      case 'monthly': return 'Monthly';
-      case 'memory': return 'Memory';
-      case 'surprise': return 'Surprise';
-      default: return 'Special';
-    }
+    const category = allCategories.find(c => c.id === type);
+    if (category) return category.name;
+    
+    // Fallback
+    const defaults = { anniversary: 'Anniversary', monthly: 'Monthly', memory: 'Memory', surprise: 'Surprise' };
+    return defaults[type] || 'Special';
+  };
+
+  // Get unique categories that have events (for legend)
+  const getLegendCategories = () => {
+    const usedTypes = new Set(allEvents.map(e => e.type));
+    return allCategories.filter(c => usedTypes.has(c.id));
   };
 
   if (loading) {
@@ -232,23 +250,14 @@ const Calendar = () => {
           })}
         </div>
 
+        {/* Dynamic Legend */}
         <div className="calendar-legend">
-          <div className="legend-item">
-            <span className="legend-emoji">🎉</span>
-            <span>Anniversary</span>
-          </div>
-          <div className="legend-item">
-            <span className="legend-emoji">💕</span>
-            <span>Monthly</span>
-          </div>
-          <div className="legend-item">
-            <span className="legend-emoji">💭</span>
-            <span>Memory</span>
-          </div>
-          <div className="legend-item">
-            <span className="legend-emoji">🎁</span>
-            <span>Surprise</span>
-          </div>
+          {getLegendCategories().map(category => (
+            <div key={category.id} className="legend-item">
+              <span className="legend-emoji">{category.emoji}</span>
+              <span>{category.name}</span>
+            </div>
+          ))}
         </div>
       </Card>
 
