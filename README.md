@@ -355,7 +355,9 @@ npm run deploy
 
 ## 📄 License
 
-This project is for personal use. Feel free to fork and customize for your own relationship! 💕
+Copyright © 2025. All rights reserved.
+
+This project is for personal use only. No permission is granted to copy, modify, distribute, or use any part of this codebase.
 
 ## 💖 Credits
 
