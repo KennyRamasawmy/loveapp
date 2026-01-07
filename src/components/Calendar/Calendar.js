@@ -14,6 +14,94 @@ const Calendar = () => {
   }, []);
 
   const calendarNotes = data?.calendarNotes || [];
+  const startDate = data?.meta?.startDate;
+
+  // Parse date string without timezone issues
+  const parseDate = (dateStr) => {
+    const [year, month, day] = dateStr.split('-').map(Number);
+    return new Date(year, month - 1, day);
+  };
+
+  // Format date to YYYY-MM-DD without timezone issues
+  const formatToDateKey = (year, month, day) => {
+    return `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+  };
+
+  // Generate automatic monthly anniversaries
+  const generateMonthlyAnniversaries = () => {
+    if (!startDate) return [];
+
+    const start = parseDate(startDate);
+    const startDay = start.getDate();
+    const startMonth = start.getMonth();
+    const startYear = start.getFullYear();
+    
+    const now = new Date();
+    const autoEvents = [];
+
+    // Generate events from start date to 1 year in the future
+    const endDate = new Date(now.getFullYear() + 1, now.getMonth(), now.getDate());
+
+    let monthCounter = 1;
+    let currentYear = startYear;
+    let currentMonth = startMonth + 1;
+
+    while (true) {
+      // Handle month overflow
+      if (currentMonth > 11) {
+        currentMonth = 0;
+        currentYear++;
+      }
+
+      // Check if we've passed the end date
+      const checkDate = new Date(currentYear, currentMonth, startDay);
+      if (checkDate > endDate) break;
+
+      const years = Math.floor(monthCounter / 12);
+      const months = monthCounter % 12;
+
+      let title, description, type;
+
+      // Handle months with fewer days
+      const lastDayOfMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+      const actualDay = Math.min(startDay, lastDayOfMonth);
+
+      if (months === 0 && years > 0) {
+        // Yearly anniversary
+        title = `🎉 ${years} Year${years > 1 ? 's' : ''} Anniversary!`;
+        description = `Celebrating ${years} amazing year${years > 1 ? 's' : ''} together!`;
+        type = 'anniversary';
+      } else {
+        // Monthly anniversary
+        if (years > 0) {
+          title = `💕 ${years}y ${months}m Together`;
+          description = `${monthCounter} months of love and happiness!`;
+        } else {
+          title = `💕 ${months} Month${months > 1 ? 's' : ''} Together`;
+          description = `Celebrating ${months} month${months > 1 ? 's' : ''} of love!`;
+        }
+        type = 'monthly';
+      }
+
+      const eventDateKey = formatToDateKey(currentYear, currentMonth, actualDay);
+
+      autoEvents.push({
+        id: `auto-${monthCounter}`,
+        date: eventDateKey,
+        title,
+        description,
+        type,
+        isAuto: true
+      });
+
+      monthCounter++;
+      currentMonth++;
+    }
+
+    return autoEvents;
+  };
+
+  const allEvents = [...calendarNotes, ...generateMonthlyAnniversaries()];
 
   const getDaysInMonth = (date) => {
     const year = date.getFullYear();
@@ -26,12 +114,8 @@ const Calendar = () => {
     return { daysInMonth, startingDay };
   };
 
-  const formatDateKey = (year, month, day) => {
-    return `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-  };
-
-  const getNoteForDate = (dateKey) => {
-    return calendarNotes.find(note => note.date === dateKey);
+  const getNotesForDate = (dateKey) => {
+    return allEvents.filter(note => note.date === dateKey);
   };
 
   const isToday = (day) => {
@@ -63,16 +147,18 @@ const Calendar = () => {
 
   const getTypeEmoji = (type) => {
     switch (type) {
-      case 'anniversary': return '💍';
+      case 'anniversary': return '🎉';
+      case 'monthly': return '💕';
       case 'memory': return '💭';
       case 'surprise': return '🎁';
-      default: return '💕';
+      default: return '💗';
     }
   };
 
   const getTypeLabel = (type) => {
     switch (type) {
       case 'anniversary': return 'Anniversary';
+      case 'monthly': return 'Monthly';
       case 'memory': return 'Memory';
       case 'surprise': return 'Surprise';
       default: return 'Special';
@@ -121,23 +207,25 @@ const Calendar = () => {
 
           {Array.from({ length: daysInMonth }).map((_, i) => {
             const day = i + 1;
-            const dateKey = formatDateKey(
+            const dateKey = formatToDateKey(
               currentDate.getFullYear(),
               currentDate.getMonth(),
               day
             );
-            const note = getNoteForDate(dateKey);
+            const notes = getNotesForDate(dateKey);
+            const hasNotes = notes.length > 0;
             const today = isToday(day);
+            const primaryNote = notes[0];
 
             return (
               <div
                 key={day}
-                className={`calendar-day ${today ? 'today' : ''} ${note ? 'has-note' : ''}`}
-                onClick={() => note && setSelectedNote(note)}
+                className={`calendar-day ${today ? 'today' : ''} ${hasNotes ? 'has-note' : ''} ${primaryNote?.type || ''}`}
+                onClick={() => hasNotes && setSelectedNote({ date: dateKey, notes })}
               >
                 <span className="day-number">{day}</span>
-                {note && (
-                  <span className="day-indicator">{getTypeEmoji(note.type)}</span>
+                {hasNotes && (
+                  <span className="day-indicator">{getTypeEmoji(primaryNote.type)}</span>
                 )}
               </div>
             );
@@ -146,15 +234,19 @@ const Calendar = () => {
 
         <div className="calendar-legend">
           <div className="legend-item">
-            <span className="legend-dot anniversary"></span>
+            <span className="legend-emoji">🎉</span>
             <span>Anniversary</span>
           </div>
           <div className="legend-item">
-            <span className="legend-dot memory"></span>
+            <span className="legend-emoji">💕</span>
+            <span>Monthly</span>
+          </div>
+          <div className="legend-item">
+            <span className="legend-emoji">💭</span>
             <span>Memory</span>
           </div>
           <div className="legend-item">
-            <span className="legend-dot surprise"></span>
+            <span className="legend-emoji">🎁</span>
             <span>Surprise</span>
           </div>
         </div>
@@ -163,23 +255,31 @@ const Calendar = () => {
       <Modal
         isOpen={!!selectedNote}
         onClose={() => setSelectedNote(null)}
-        title={selectedNote?.title}
+        title={selectedNote?.notes?.length > 1 ? 'Events on this day' : selectedNote?.notes?.[0]?.title}
       >
         {selectedNote && (
           <div className="note-modal">
-            <div className="note-type">
-              <span className="note-emoji">{getTypeEmoji(selectedNote.type)}</span>
-              <span className="note-label">{getTypeLabel(selectedNote.type)}</span>
-            </div>
-            <div className="note-date">
-              {new Date(selectedNote.date).toLocaleDateString('en-US', {
-                weekday: 'long',
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-              })}
-            </div>
-            <p className="note-description">{selectedNote.description}</p>
+            {selectedNote.notes.map((note, index) => (
+              <div key={note.id || index} className={`note-item ${selectedNote.notes.length > 1 ? 'multiple' : ''}`}>
+                <div className="note-type">
+                  <span className="note-emoji">{getTypeEmoji(note.type)}</span>
+                  <span className="note-label">{getTypeLabel(note.type)}</span>
+                  {note.isAuto && <span className="note-auto-badge">Auto</span>}
+                </div>
+                {selectedNote.notes.length > 1 && (
+                  <h4 className="note-title">{note.title}</h4>
+                )}
+                <div className="note-date">
+                  {new Date(note.date + 'T12:00:00').toLocaleDateString('en-US', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                  })}
+                </div>
+                <p className="note-description">{note.description}</p>
+              </div>
+            ))}
           </div>
         )}
       </Modal>
