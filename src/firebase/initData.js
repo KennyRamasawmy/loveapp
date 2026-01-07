@@ -1,10 +1,10 @@
 export const initialData = {
   meta: {
     names: {
-      him: "Your Name",
-      her: "Her Name"
+      him: "Kenny",
+      her: "Lakshana"
     },
-    startDate: "2023-01-15",
+    startDate: "2020-06-11",
     welcomeMessage: "Welcome to our little world 💕",
     secretMessage: "You are my everything. Forever and always. 💖"
   },
