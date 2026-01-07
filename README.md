@@ -1,70 +1,301 @@
-# Getting Started with Create React App
+# 💕 Love App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A private, modern, romantic web application designed as a mini love app for couples. Built with React and Firebase, hosted for free on GitHub Pages.
 
-## Available Scripts
+![Love App](https://img.shields.io/badge/Made%20with-Love-ff69b4)
+![React](https://img.shields.io/badge/React-18.x-61dafb)
+![Firebase](https://img.shields.io/badge/Firebase-10.x-ffca28)
 
-In the project directory, you can run:
+## ✨ Features
 
-### `npm start`
+### 🏠 Home Page
+- Beautiful welcome message with your names
+- Relationship duration display (Years & Months)
+- Live statistics: Days, Months, Years together
+- Anniversary countdown
+- **Special Day Celebrations**: Automatic animations and messages on monthly/yearly anniversaries
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### 📷 Gallery
+- Responsive photo grid
+- Full-screen modal view
+- Image captions
+- Automatic image compression
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### 💌 Daily Quote
+- Date-based quotes
+- Fallback romantic messages
+- Smooth fade-in animations
 
-### `npm test`
+### 📅 Calendar
+- Monthly calendar view
+- **Auto-generated monthly anniversaries**
+- **Auto-generated yearly anniversaries**
+- Custom categories with emojis
+- Click any date to see events
+- Dynamic legend based on active categories
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### 💫 Memory Timeline
+- Chronological journey of your relationship
+- Scroll-triggered reveal animations
+- Beautiful milestone cards
 
-### `npm run build`
+### 🥚 Easter Egg
+- Hidden surprise message
+- Triggered by typing a secret word OR clicking the logo 5 times
+- Floating hearts animation
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### ⚙️ Admin Panel (Admin only)
+- Edit all content in real-time
+- Manage photos, quotes, calendar events, timeline
+- **Custom calendar categories** with emoji picker
+- Live preview before saving
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## 🔐 Security Features
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Authentication
+- Firebase Authentication (email/password)
+- Role-based access control (Admin vs User)
+- Protected routes
 
-### `npm run eject`
+### Database Rules
+- Read access: Authenticated users only
+- Write access: Admin role only
+- User documents: Private to each user
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## 🛠️ Tech Stack
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+| Technology | Purpose |
+|------------|---------|
+| React 18 | Frontend framework |
+| Firebase Auth | Authentication |
+| Firebase Firestore | Database |
+| React Router 6 | Navigation |
+| GitHub Pages | Free hosting |
+| CSS3 | Styling & animations |
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## 📦 Installation
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### Prerequisites
+- Node.js 16+ installed
+- Firebase account
+- GitHub account
 
-## Learn More
+### Step 1: Clone & Install
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```bash
+git clone https://github.com/YOUR_USERNAME/love-app.git
+cd love-app
+npm install
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Step 2: Firebase Setup
 
-### Code Splitting
+1. Go to [Firebase Console](https://console.firebase.google.com)
+2. Create a new project
+3. Enable **Authentication** → Email/Password
+4. Create **Firestore Database**
+5. Get your config from Project Settings
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+### Step 3: Configure Firebase
 
-### Analyzing the Bundle Size
+Create/update `src/firebase/config.js`:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+```javascript
+import { initializeApp } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore';
 
-### Making a Progressive Web App
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_PROJECT.appspot.com",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+const app = initializeApp(firebaseConfig);
+export const auth = getAuth(app);
+export const db = getFirestore(app);
+```
 
-### Advanced Configuration
+### Step 4: Create Users
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+In Firebase Console → Authentication → Users:
+1. Add your admin account (you)
+2. Add user account (her)
+3. Copy both User UIDs
 
-### Deployment
+### Step 5: Setup Firestore
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+1. Create collection `users`
+2. Add document with Admin UID:
+   ```json
+   { "role": "admin", "email": "your@email.com" }
+   ```
+3. Add document with Her UID:
+   ```json
+   { "role": "user", "email": "her@email.com" }
+   ```
 
-### `npm run build` fails to minify
+### Step 6: Initialize Data
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+1. Run `npm start`
+2. Go to `http://localhost:3000/setup`
+3. Click "Initialize Database"
+4. Remove `/setup` route after initialization (see Security section)
+
+### Step 7: Deploy
+
+Update `package.json`:
+```json
+"homepage": "https://YOUR_USERNAME.github.io/love-app"
+```
+
+Deploy:
+```bash
+npm run deploy
+```
+
+### Step 8: Configure Firebase Domain
+
+In Firebase Console → Authentication → Settings → Authorized domains:
+- Add `YOUR_USERNAME.github.io`
+
+## 🔒 Firestore Security Rules
+
+```javascript
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{userId} {
+      allow read: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    match /app/{document=**} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && 
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+  }
+}
+```
+
+## 📁 Project Structure
+
+```
+src/
+├── components/
+│   ├── Admin/          # Admin panel components
+│   ├── Auth/           # Login component
+│   ├── Calendar/       # Calendar feature
+│   ├── Gallery/        # Photo gallery
+│   ├── Home/           # Home page
+│   ├── Quote/          # Daily quote
+│   ├── Timeline/       # Memory timeline
+│   └── UI/             # Reusable components
+├── context/
+│   └── AuthContext.js  # Authentication state
+├── firebase/
+│   ├── config.js       # Firebase configuration
+│   └── initData.js     # Initial data schema
+├── hooks/
+│   └── useAppData.js   # Data fetching hook
+├── styles/
+│   ├── globals.css     # Global styles
+│   └── animations.css  # Animation utilities
+├── App.js              # Main app & routing
+└── index.js            # Entry point
+```
+
+## 🎨 Customization
+
+### Colors
+Edit CSS variables in `src/styles/globals.css`:
+
+```css
+:root {
+  --color-primary: #e8a4b8;
+  --color-primary-soft: #f5d5dd;
+  --color-primary-dark: #d4899e;
+  /* ... more variables */
+}
+```
+
+### Fonts
+The app uses:
+- **Cormorant Garamond** - Display/headings
+- **Quicksand** - Body text
+
+Change in `src/styles/globals.css` Google Fonts import.
+
+### Easter Egg
+Change trigger word in Admin → Settings → Easter Egg Trigger Word
+
+## 📱 Mobile Support
+
+- Mobile-first responsive design
+- Touch-friendly interactions
+- PWA-ready manifest
+- Optimized for iOS and Android browsers
+
+## 🚀 Deployment Commands
+
+```bash
+# Local development
+npm start
+
+# Build for production
+npm run build
+
+# Deploy to GitHub Pages
+npm run deploy
+
+# Update after changes
+git add .
+git commit -m "Your message"
+git push origin main
+npm run deploy
+```
+
+## ⚠️ Important Security Notes
+
+1. **Never commit Firebase config with real keys to public repos**
+2. **Use environment variables for sensitive data** (see Security Guide below)
+3. **Remove /setup route after initialization**
+4. **Keep your repository private if it contains personal data**
+5. **Regularly review Firebase security rules**
+
+## 🐛 Troubleshooting
+
+### "Permission denied" errors
+- Check Firestore security rules
+- Verify user role in `users` collection
+- Ensure you're logged in
+
+### Images not saving
+- Images are compressed but still have size limits
+- Keep original images under 2MB
+- Firestore document limit is 1MB total
+
+### Calendar dates off by one day
+- This is a timezone issue - already fixed in the code
+- Dates are parsed without timezone conversion
+
+### Blank page after deploy
+- Check `homepage` in package.json
+- Verify GitHub Pages is using `gh-pages` branch
+- Clear browser cache
+
+## 📄 License
+
+This project is for personal use. Feel free to fork and customize for your own relationship! 💕
+
+## 💖 Credits
+
+Made with love for that special someone.
+
+---
+
+**Questions or issues?** Create an issue in this repository.
