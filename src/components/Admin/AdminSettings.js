@@ -1,9 +1,29 @@
+import { useTheme } from '../../context/ThemeContext';
+
+const PRESET_COLORS = [
+  { name: 'Rose', color: '#e8a4b8' },
+  { name: 'Lavender', color: '#b8a4e8' },
+  { name: 'Sky', color: '#a4c8e8' },
+  { name: 'Mint', color: '#a4e8c8' },
+  { name: 'Peach', color: '#e8c4a4' },
+  { name: 'Coral', color: '#e8a4a4' },
+  { name: 'Gold', color: '#e8d4a4' },
+  { name: 'Berry', color: '#c8a4e8' },
+];
+
 const AdminSettings = ({ data, onChange }) => {
+  const { setAccentColor } = useTheme();
+
   const updateField = (field, value) => {
     onChange({
       ...data,
       [field]: value
     });
+
+    // Live preview for accent color
+    if (field === 'accentColor') {
+      setAccentColor(value);
+    }
   };
 
   return (
@@ -26,6 +46,22 @@ const AdminSettings = ({ data, onChange }) => {
 
       <div className="admin-form-group">
         <label className="admin-form-label">Accent Color</label>
+        
+        {/* Preset Colors */}
+        <div className="color-presets">
+          {PRESET_COLORS.map((preset) => (
+            <button
+              key={preset.name}
+              type="button"
+              className={`color-preset ${data?.accentColor === preset.color ? 'active' : ''}`}
+              style={{ backgroundColor: preset.color }}
+              onClick={() => updateField('accentColor', preset.color)}
+              title={preset.name}
+            />
+          ))}
+        </div>
+
+        {/* Custom Color Picker */}
         <div className="color-picker-row">
           <input
             type="color"
@@ -42,9 +78,37 @@ const AdminSettings = ({ data, onChange }) => {
             style={{ flex: 1 }}
           />
         </div>
+        
         <p className="admin-hint">
-          💡 This feature is for future use. Color customization coming soon!
+          💡 Choose a preset or pick a custom color. Changes preview instantly!
         </p>
+      </div>
+
+      {/* Color Preview */}
+      <div className="color-preview-card">
+        <div className="preview-header">
+          <span className="preview-icon">👀</span>
+          <span>Live Preview</span>
+        </div>
+        <div className="preview-content">
+          <div 
+            className="preview-button"
+            style={{ backgroundColor: data?.accentColor || '#e8a4b8' }}
+          >
+            Sample Button
+          </div>
+          <div 
+            className="preview-card"
+            style={{ borderColor: data?.accentColor || '#e8a4b8' }}
+          >
+            <span 
+              className="preview-text"
+              style={{ color: data?.accentColor || '#e8a4b8' }}
+            >
+              Accent Text
+            </span>
+          </div>
+        </div>
       </div>
     </div>
   );
